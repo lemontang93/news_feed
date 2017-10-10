@@ -59,7 +59,8 @@ http://127.0.0.1:8888/subscription
 
 2. 公司、站点管理
 
-在公司栏可以查看公司列表和添加公司，点击公司进入公司Profile也可以编辑
+在公司栏可以查看公司列表和添加公司，点击公司进入公司Profile页可以编辑
+
 导入收集的公司信息
 ```
 cd utils/ ; python xlsx_reader.py
@@ -108,6 +109,7 @@ python info_engine.py
 
 #### 发送邮件
 需要在config设置EMAIL和SEND_MAIL_INTERVAL参数
+
 启动定时发邮件程序
 ```
 python mail_bot.py
