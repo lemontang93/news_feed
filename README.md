@@ -72,7 +72,7 @@ cd utils/ ; python xlsx_reader.py
 
 3. 抓取日志
 http://127.0.0.1:8888/log
-![news feed](http://oiip5z89k.bkt.clouddn.com/WechatIMG3.jpeg)
+![news feed](http://oiip5z89k.bkt.clouddn.com/WechatIMG6.jpeg)
 
 
 4. 信息流
