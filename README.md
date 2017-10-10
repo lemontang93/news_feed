@@ -13,6 +13,7 @@
 #### 环境准备
 系统需安装MySQL和Redis数据库以及Python3.
 建议安装Python3虚拟环境之后运行。
+
 安装依赖包
 ```
 pip install -r requirements.txt
@@ -23,6 +24,7 @@ pip install -r requirements.txt
 
 #### Web运行
 创建MySQL数据库
+
 连接MySQL，执行
 ```
 mysql> create database alpha_z default charset utf8;
@@ -56,6 +58,7 @@ http://127.0.0.1:8888/subscription
 
 
 2. 公司、站点管理
+
 在公司栏可以查看公司列表和添加公司，点击公司进入公司Profile也可以编辑
 导入收集的公司信息
 ```
@@ -72,8 +75,11 @@ http://127.0.0.1:8888/log
 
 
 4. 信息流
+
 资讯栏包括全部信息，海外栏是包含关键词的企业出海信息
+
 可以在关键词栏管理关键词。
+
 将国家和地区名导入数据库
 ```
 cd utils/ ; python keywords_reader.py
@@ -84,6 +90,7 @@ cd utils/ ; python keywords_reader.py
 
 #### 抓取控制
 1. 开启celery任务队列(需要先安装redis)
+
 在系统根目录执行
 ```
 celery -A info_engine worker -c 20 -l info
