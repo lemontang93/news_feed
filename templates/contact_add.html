@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: auto; padding: 60px 20px 0 20px; width: 360px;">
+    <form class="form-horizontal" id="ContactForm" method="post" action="">
+    {% module xsrf_form_html() %}
+      <h2>联系人信息添加</h2>
+      <h5>{{ company.name_cn }}</h5>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="text" name="fullname" placeholder="姓名"/>
+      </div>
+      <div class="mdui-textfield">
+          <select class="mdui-select" name="gender">
+            <option value="">性别</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+      </div>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="text" name="position" placeholder="职位"/>
+      </div>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="text" name="phone_number" placeholder="电话"/>
+      </div>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="text" name="wechat" placeholder="微信"/>
+      </div>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="email" name="email" placeholder="邮箱"/>
+      </div>
+      <div class="mdui-textfield">
+          <textarea class="mdui-textfield-input" type="text" name="comment" placeholder="备注(字数不限)"></textarea>
+      </div>
+      <a href="javascript:history.go(-1);" class="mdui-btn mdui-btn-raised">取消</a>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" type="button" id="contact-submit">提交</button>
+    </form>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$("#contact-submit").on('click', function () {
+        var uploadFormData = $$('#ContactForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/contact/add/{{ company.id }}',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.href="/profile/{{ company.id }}";
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$(".keyword-delete").on('click', function () {
+        if (confirm('是否要删除该关键词？')) {
+            var keyword_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/keyword/delete',
+                data: {'keyword_id': keyword_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        alert(res["msg"]);
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+{% end %}

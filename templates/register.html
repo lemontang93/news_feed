@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div style="margin: auto; padding: 120px 20px 0 20px; width: 360px;">
+  <form class="form-horizontal" id="RegisterForm" method="post" action="">
+    {% module xsrf_form_html() %}
+      <h2>新闻监控</h2>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="text" name="username" placeholder="用户名"/>
+      </div>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="email" name="email" placeholder="邮箱"/>
+      </div>
+      <div class="mdui-textfield">
+         <input class="mdui-textfield-input" type="password" name="password" placeholder="密码"/>
+      </div>
+      <div class="mdui-textfield">
+         <input class="mdui-textfield-input" type="password" name="confirm_password" placeholder="确认密码"/>
+      </div>
+
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" type="button" id="login-submit">{{ _("register") }}</button>
+  </form>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$("#login-submit").on('click', function () {
+        var uploadFormData = $$('#RegisterForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/register',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.href = "/subscription";
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+</script>
+
+{% end %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: 20px;">
+    <div style="margin-top: 60px;">
+          <!--<ul>-->
+            <!--<li>序号</li>-->
+            <!--<li>站点链接</li>-->
+            <!--&lt;!&ndash;<th>所属公司</th>&ndash;&gt;-->
+            <!--<li>添加时间</li>-->
+            <!--<li>操作</li>-->
+          <!--</ul>-->
+
+            {% for index, website in enumerate(websites) %}
+            <div class="mdui-container">
+                <span class="mdui-col-xs-6">
+                    {{ index+1 }}.
+                    <a href="{{ website.url }}">{{ website.url }}</a>
+                </span>
+                <span class="mdui-col-xs-3">{{ website.company.name_cn }}</span>
+                <!--<td></td>-->
+                <span class="mdui-col-xs-2">{{ website.create_at }}</span>
+                <span class="mdui-col-xs-1">
+                    <button class="website-delete" type="button"
+                            id="{{ website.id }}">删除</button>
+                </span>
+            </div>
+            {% end %}
+
+    </div>
+
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$(".website-delete").on('click', function () {
+        if (confirm('是否要删除该站点？')) {
+            var website_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/website/delete',
+                data: {'website_id': website_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        alert(res["msg"]);
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+
+    });
+</script>
+
+
+
+{% end %}

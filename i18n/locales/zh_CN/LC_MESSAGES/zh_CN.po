@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-08-21 15:29+0800\n"
+"PO-Revision-Date: 2017-08-21 15:30+0800\n"
+"Last-Translator: NolanZhao <z_nolan@126.com>\n"
+"Language-Team: AlphaZ <z_nolan@126.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+msgid "username"
+msgstr "用户名"
+
+msgid "email"
+msgstr "邮箱"
+
+msgid "password"
+msgstr "密码"
+
+msgid "register"
+msgstr "注册"
+
+msgid "login"
+msgstr "登录"
+
+msgid "logout"
+msgstr "登出"
+
+msgid "confirm password"
+msgstr "确认密码"
+
+msgid "return"
+msgstr "返回"
+
+msgid "cancel"
+msgstr "取消"
+
+msgid "homepage"
+msgstr "主页"
+
+msgid "confirm"
+msgstr "确定"
+
+msgid "submit"
+msgstr "提交"
+

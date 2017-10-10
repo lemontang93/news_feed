@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: 60px;">
+    <div class="mdui-col-xs-7">
+        <h3>
+            {{ company.name_cn }}
+            <a class="mdui-btn mdui-btn-raised profile-edit" href="/profile/edit/{{ company.id }}" style="margin-left: 200px;">编辑</a>
+        </h3>
+
+        <p>英文名称： {{ company.name_en }}</p>
+
+        {% if profile %}{% if profile.portal %}<p>公司网站： {{ profile.portal }}</p>{% end %}{% end %}
+        <div>抓取页面：
+            <a href="/website/add/{{ company.id }}" class="mdui-btn mdui-btn-icon mdui-color-red mdui-ripple">
+                <i class="mdui-icon material-icons">add</i>
+            </a>
+
+            {% for w in websites %}
+            <div style="font-size: 10px; background-color: #ffc; margin: 6px; padding: 6px;">
+                <p>URL：<a href="{{ w.url }}" target="_blank">{{ w.url }}</a></p>
+                <em>创建时间：{{ w.create_at }}</em>
+                <button class="website-delete" type="button"
+                            id="{{ w.id }}">删除</button>
+            </div>
+            {% end %}
+        </div>
+
+        <div>联系人：
+            <a href="/contact/add/{{ company.id }}" class="mdui-btn mdui-btn-icon mdui-color-red mdui-ripple">
+                <i class="mdui-icon material-icons">add</i>
+            </a>
+
+            {% for p in contact %}
+            <div style="font-size: 10px; background-color: #ffc; margin: 6px; padding: 6px;">
+                {%if p.name %}
+                <p style="font-weight: 600">姓名：{{ p.name }}
+                <button class="contact-delete" type="button" style="margin-left: 50px;"
+                            id="{{ p.id }}">删除</button>
+                </p>{% end %}
+                {%if p.gender %}<p>性别：{{ p.gender }}</p>{% end %}
+                {%if p.position %}<p>职位：{{ p.position }}</p>{% end %}
+                {%if p.phone_number %}<p>电话：{{ p.phone_number }}</p>{% end %}
+                {%if p.wechat %}<p>微信：{{ p.wechat }}</p>{% end %}
+                {%if p.email %}<p>邮箱：{{ p.email }}</p>{% end %}
+                {%if p.comment %}<p>备注：{{ p.comment }}</p>{% end %}
+                {%if p.create_at %}<em>创建时间：{{ p.create_at }}</em>{% end %}
+            </div>
+            {% end %}
+        </div>
+        {% if profile %}{% if profile.stock_code %}<p>股票代码： {{ profile.stock_code }}</p>{% end %}{% end %}
+
+    </div>
+    <div class="mdui-col-xs-5">
+
+    </div>
+
+
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$(".website-delete").on('click', function () {
+        if (confirm('是否要删除该站点？')) {
+            var website_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/website/delete',
+                data: {'website_id': website_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+
+    });
+
+
+    $$(".contact-delete").on('click', function () {
+        if (confirm('是否要删除该联系人？')) {
+            var contact_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/contact/delete',
+                data: {'contact_id': contact_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+
+    });
+</script>
+
+{% end %}

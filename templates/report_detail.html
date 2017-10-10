@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: 80px;">
+    <div>
+        <h3>{{ report.title }}</h3>
+        <em>{{ report.create_at }}</em>
+        <span style="margin-left: 20px;">作者：{{ report.author }}</span>
+        <span style="margin-left: 20px;">责任编辑：{{ report.editor }}</span>
+        <p>[标签] {{ report.tags }}</p>
+        <p>[导语]<br><br>{{ report.lead }}</p>
+        <p>[正文]<br><br>{% module HTML_PARSE(report.content) %}</p>
+    </div>
+</div>
+
+
+
+{% end %}

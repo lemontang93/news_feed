@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div class="mdui-container" style="margin-top: 60px;">
+    <div style="margin: 60px 0px 0 20px; width: 300px; ">
+        <form class="form-horizontal" id="SearchForm" method="post" action="/oversea/company/search">
+        {% module xsrf_form_html() %}
+          <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" name="search_text" placeholder="Search"/>
+          </div>
+        <button class="mdui-textfield-icon mdui-btn mdui-btn-icon" style="margin-left: 260px; margin-top: -60px">
+            <i class="mdui-icon material-icons">search</i>
+        </button>
+        </form>
+    </div>
+
+    {% for index, feed in enumerate(feeds) %}
+        <div style="padding: 17px 0px">
+            <span class="mdui-col-xs-6" style="font-size: 12px; color: #000;">
+                {{ index+1 }}.
+                <a href="{{ feed.url }}" target="_blank" style="text-decoration: none; color: #000;">
+                    {{ feed.text[:50] }}
+                </a>
+            </span>
+            <span class="mdui-col-xs-2" style="font-size: 12px">{{ feed.create_at }}</span>
+            {% if feed.company %}
+            <span class="mdui-col-xs-3" style="font-size: 12px">
+                <a href="/profile/{{ feed.company.id }}" style="text-decoration:none; color: #000;">{{ feed.company.name_cn }}</a>
+            </span>
+            {% end %}
+            <span class="mdui-col-xs-1" style="font-size: 12px; margin-top: -6px">
+                {% if feed.company %}<button class="mdui-btn-xs info-filter" id="{{ feed.company.id }}" type="button">筛选</button>{% end %}
+            </span>
+        </div>
+    {% end %}
+</div>
+
+
+{% if total_page > 1 %}
+<nav class="center">
+  <ul class="pagination">
+    {% if current_page > 1 %}
+        <li><a href="/oversea/page/{{ current_page-1 }}">上一页</a></li>
+    {% end %}
+
+    {% if total_page <= 20 %}
+        {% for n in range(1, total_page+1) %}
+          <li><a {% if current_page == n %}class="active"{% end %} href="/oversea/page/{{ n }}">{{ n }}</a></li>
+        {% end %}
+    {% else %}
+        {% for n in range(1, 21) %}
+          <li><a {% if current_page == n %}class="active"{% end %} href="/oversea/page/{{ n }}">{{ n }}</a></li>
+        {% end %}
+          <li><a>...</a></li>
+    {% end %}
+
+    {% if current_page < total_page %}
+        <li><a href="/oversea/page/{{ current_page+1 }}">下一页</a></li>
+    {% end %}
+
+    {% if total_page > 20 %}
+        <li><a {% if current_page == total_page %}class="active"{% end %} href="/oversea/page/{{ total_page }}">最后一页</a></li>
+    {% end %}
+  </ul>
+</nav>
+{% end %}
+
+
+
+<style type="text/css">
+    ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul.pagination li {display: inline;}
+
+    ul.pagination li a {
+        color: black;
+        float: left;
+        padding: 6px 12px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+    }
+
+    ul.pagination li a.active {
+        background-color: #ccc;
+        color: white;
+        border: 1px solid #ccc;
+    }
+
+    ul.pagination li a:hover:not(.active) {background-color: #ddd;}
+
+    nav.center {margin: 60px; text-align: center;}
+</style>
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$(".info-filter").on('click', function () {
+        var company_id = $$(this).attr("id");
+        window.location.href="/oversea/filter/" + company_id + "/page/1";
+    });
+</script>
+
+
+{% end %}

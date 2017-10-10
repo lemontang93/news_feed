@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+
+<div style="margin: auto; padding: 200px 20px 0 20px; width: 360px;">
+  <form class="form-horizontal" id="CreateWensiteForm" method="post" action="">
+        {% module xsrf_form_html() %}
+          <h2>添加站点</h2>
+          <h5>{{ company.name_cn }}</h5>
+          <div class="mdui-textfield">
+              <input class="mdui-textfield-input" type="url" name="url" placeholder="URL"/>
+          </div>
+          <div class="mdui-textfield">
+              <input class="mdui-textfield-input" type="text" name="company_id" style="display: none;" value="{{ company.id }}"/>
+          </div>
+          <a href="javascript:history.go(-1);" class="mdui-btn mdui-btn-raised">取消</a>
+          <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" type="button" id="create-website-submit">添加</button>
+      </form>
+</div>
+
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$("#create-website-submit").on('click', function () {
+        var uploadFormData = $$('#CreateWensiteForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/website',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.href = "/profile/{{ company.id }}";
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+
+</script>
+
+
+
+
+
+{% end %}

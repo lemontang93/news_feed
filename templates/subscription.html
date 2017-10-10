@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: auto; padding: 200px 0px 20px 0; width: 360px;">
+  <form class="form-horizontal" id="SubscriptionForm" method="post" action="">
+    {% module xsrf_form_html() %}
+      <h2>订阅</h2>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="email" name="email" placeholder="Email"/>
+      </div>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" type="button" id="subscription-submit">提交</button>
+  </form>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$("#subscription-submit").on('click', function () {
+        var uploadFormData = $$('#SubscriptionForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/subscription',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                   alert(res["msg"]);
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+</script>
+
+
+{% end %}

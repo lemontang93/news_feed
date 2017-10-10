@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin-top: 60px">
+    <div class="mdui-col-xs-7">
+        {% for keyword in keywords %}
+        <div class="mdui-chip">
+          <span class="mdui-chip-title">{{ keyword.text }}</span>
+          <span class="mdui-chip-delete keyword-delete" id="{{ keyword.id }}"><i class="mdui-icon material-icons">cancel</i></span>
+        </div>
+        {% end %}
+    </div>
+
+    <div class="mdui-col-xs-5">
+      <form class="form-horizontal" id="KeywordForm" method="post" action="">
+        {% module xsrf_form_html() %}
+          <h2>关键词添加</h2>
+          <div class="mdui-textfield">
+              <input class="mdui-textfield-input" type="text" name="keyword" placeholder="用于过滤新闻的关键词"/>
+          </div>
+          <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" type="button" id="keyword-submit">提交</button>
+      </form>
+    </div>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$("#keyword-submit").on('click', function () {
+        var uploadFormData = $$('#KeywordForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/keyword',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.reload();
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$(".keyword-delete").on('click', function () {
+        if (confirm('是否要删除该关键词？')) {
+            var keyword_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/keyword/delete',
+                data: {'keyword_id': keyword_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        alert(res["msg"]);
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+{% end %}

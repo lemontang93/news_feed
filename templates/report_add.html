@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+
+<div style="margin: auto; padding: 60px 20px 60px 20px; width: 660px;">
+  <form class="form-horizontal" id="CreateReportForm" method="post" action="">
+    {% module xsrf_form_html() %}
+      <h2>报道</h2>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="text" name="title" placeholder="标题"/>
+      </div>
+      <div class="mdui-textfield">
+          <textarea class="mdui-textfield-input" type="text" name="author" placeholder="作者"></textarea>
+      </div>
+      <div class="mdui-textfield">
+          <textarea class="mdui-textfield-input" type="text" name="editor" placeholder="责任编辑"></textarea>
+      </div>
+      <div class="mdui-textfield">
+          <textarea class="mdui-textfield-input" type="text" name="lead" placeholder="导语"></textarea>
+      </div>
+      <div class="mdui-textfield">
+          <textarea class="mdui-textfield-input" type="text" name="tags" placeholder="标签"></textarea>
+      </div>
+      <div class="mdui-textfield">
+         <textarea class="ta10" type="text" name="content" rows="20" cols="100" placeholder="正文"></textarea>
+      </div>
+      <a href="javascript:history.go(-1);" class="mdui-btn mdui-btn-raised">取消</a>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" type="button" id="create-report-submit">提交</button>
+  </form>
+</div>
+
+
+<style type="text/css">
+/* Larger Side Border */
+.ta10 {
+	border:1px solid #3366FF;
+	border-left: 4px solid #3366FF;
+}
+</style>
+
+
+<script>
+    var $$ = mdui.JQ;
+
+    $$("#create-report-submit").on('click', function () {
+        var uploadFormData = $$('#CreateReportForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/report/add',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.href = "/report";
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+
+</script>
+
+
+
+
+
+{% end %}

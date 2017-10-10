@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div style="margin: auto; padding: 200px 20px 0 20px; width: 360px;">
+  <form class="form-horizontal" id="LoginForm" method="post" action="">
+    {% module xsrf_form_html() %}
+      <h2>新闻监控</h2>
+      <div class="mdui-textfield">
+          <input class="mdui-textfield-input" type="email" name="email" placeholder="Email"/>
+      </div>
+      <div class="mdui-textfield">
+         <input class="mdui-textfield-input" type="password" name="password" placeholder="Password"/>
+      </div>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" type="button" id="login-submit">{{ _("login") }}</button>
+  </form>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$("#login-submit").on('click', function () {
+        var uploadFormData = $$('#LoginForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/login',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.href = "/";
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+</script>
+
+{% end %}

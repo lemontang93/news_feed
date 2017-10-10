@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div>
+    <div style="margin: 60px 20px;">
+        {% for log in logs %}
+            {% if log.text.startswith("[NOTICE]") %}<p style="font-size: 10px; color: #000;">#{{ log.id }} {{ log.text }}</p>{% end %}
+            {% if log.text.startswith("[RECORD]") %}<p style="font-size: 10px; color: blue;">#{{ log.id }} {{ log.text }}</p>{% end %}
+            {% if log.text.startswith("[ERROR]") %}<p style="font-size: 10px; color: red;">#{{ log.id}} {{ log.text }}</p>{% end %}
+        {% end %}
+    </div>
+</div>
+
+
+{% end %}

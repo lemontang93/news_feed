@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: 20px;">
+    <div class="mdui-table-fluid" style="margin-top: 60px;">
+        <a href="/report/add" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" style="">+创建</a>
+      <table class="mdui-table">
+        <thead>
+          <tr>
+            <th>#序号</th>
+            <th>标题</th>
+            <th>作者</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for index, report in enumerate(reports) %}
+            <tr>
+                <td>{{ index+1 }}</td>
+                <td><a href="/report/detail/{{ report.id }}">{{ report.title }}</a></td>
+                <td>{{ report.author }}</td>
+                <td>{{ report.create_at }}</td>
+                <td>
+                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red report-delete" type="button"
+                            id="{{ report.id }}">删除</button>
+                </td>
+            </tr>
+            {% end %}
+
+
+        </tbody>
+      </table>
+    </div>
+
+</div>
+
+
+
+
+<script>
+    var $$ = mdui.JQ;
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$(".report-delete").on('click', function () {
+        if (confirm('是否要删除该报道？')) {
+            var report_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/report/delete',
+                data: {'report_id': report_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        alert(res["msg"]);
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+{% end %}

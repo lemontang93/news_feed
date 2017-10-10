@@ -1,0 +1,75 @@
+index.html{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: 20px; font-size: 12px">
+    <div style="margin: 60px 0px 0 20px; width: 300px; ">
+        <form class="form-horizontal" id="SearchForm" method="post" action="/company/search">
+        {% module xsrf_form_html() %}
+          <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" name="search_text" placeholder="Search"/>
+          </div>
+        <button class="mdui-textfield-icon mdui-btn mdui-btn-icon" style="margin-left: 260px; margin-top: -60px">
+            <i class="mdui-icon material-icons">search</i>
+        </button>
+        </form>
+    </div>
+    <a href="/company/add" class="mdui-btn-xs mdui-ripple" style="margin: -60px 0 0 600px;">+添加</a>
+
+    <div style="margin: 20px 0">
+      <table>
+        <tbody>
+            {% for index, company in enumerate(companies) %}
+            <tr>
+                <td>{{ index+1 }}</td>
+                <td><a href="/profile/{{ company.id }}">{{ company.name_cn }}</a></td>
+                <td>{{ company.name_en }}</td>
+                <td>{{ company.industry }}</td>
+                <td>
+                    <button class="mdui-btn-xs company-delete" type="button"
+                            id="{{ company.id }}">删除</button>
+                </td>
+            </tr>
+            {% end %}
+        </tbody>
+      </table>
+    </div>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $$(".company-delete").on('click', function () {
+        if (confirm('是否要删除该公司？')) {
+            var company_id = $$(this).attr("id");
+            $$.ajax({
+                method: 'POST',
+                url: '/company/delete',
+                data: {'company_id': company_id, '_xsrf': getCookie("_xsrf")},
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res["success"] == true){
+                        alert(res["msg"]);
+                        window.location.reload();
+                    } else {
+                        alert(res["msg"]);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+
+
+
+{% end %}

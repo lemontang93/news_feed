@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div style="margin: 60px;">
+    <div class="mdui-col-xs-7">
+        <form class="form-horizontal" id="CompanyProfileEditForm" method="post" action="">
+        {% module xsrf_form_html() %}
+          <h2>公司资料编辑</h2>
+          <div class="mdui-textfield">
+              <input class="mdui-textfield-input" type="text" name="name_cn" placeholder="公司中文名称" value="{{ company.name_cn }}" />
+          </div>
+          <div class="mdui-textfield">
+              <input class="mdui-textfield-input" type="text" name="name_en" placeholder="公司英文名称" value="{{ company.name_en }}" />
+          </div>
+          <div class="mdui-textfield">
+             <input class="mdui-textfield-input" type="text" name="portal" placeholder="公司官网" {% if profile %}{% if profile.portal %}value="{{ profile.portal }}"{% end %}{% end %} />
+          </div>
+          <div class="mdui-textfield">
+             <input class="mdui-textfield-input" type="text" name="stock_code" placeholder="股票代码" {% if profile %}{% if profile.stock_code %}value="{{ profile.stock_code }}"{% end %}{% end %} />
+          </div>
+          <a href="javascript:history.go(-1);" class="mdui-btn mdui-btn-raised">取消</a>
+          <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" type="button" id="profile-submit">提交</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var $$ = mdui.JQ;
+    $$("#profile-submit").on('click', function () {
+        var uploadFormData = $$('#CompanyProfileEditForm').serialize();
+        $$.ajax({
+            method: 'POST',
+            url: '/profile/edit/{{ company.id }}',
+            data: uploadFormData,
+            success: function (data) {
+                var res = JSON.parse(data);
+                if(res["success"] == true){
+                    window.location.href = "/profile/{{ company.id }}";
+                } else {
+                    alert(res["msg"]);
+                }
+            }
+        });
+    });
+</script>
+
+
+
+{% end %}
